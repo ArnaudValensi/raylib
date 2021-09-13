@@ -4877,15 +4877,19 @@ static void WindowSizeCallback(GLFWwindow *window, int width, int height)
 
     if (IsWindowFullscreen()) return;
 
-    Vector2 windowScaleDPI = GetWindowScaleDPI();
-
     // Set current screen size
 #if defined(__APPLE__)
     CORE.Window.screen.width = width;
     CORE.Window.screen.height = height;
 #else
-    CORE.Window.screen.width = width / windowScaleDPI.x;
-    CORE.Window.screen.height = height / windowScaleDPI.y;
+    if ((CORE.Window.flags & FLAG_WINDOW_HIGHDPI) > 0) {
+        Vector2 windowScaleDPI = GetWindowScaleDPI();
+        CORE.Window.screen.width = width / windowScaleDPI.x;
+        CORE.Window.screen.height = height / windowScaleDPI.y;
+    } else {
+        CORE.Window.screen.width = width;
+        CORE.Window.screen.height = height;
+    }
 #endif
 
     // NOTE: Postprocessing texture is not scaled to new size
