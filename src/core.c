@@ -2147,8 +2147,8 @@ void EndTextureMode(void)
     SetupViewport(CORE.Window.render.width, CORE.Window.render.height);
 
     // Reset current fbo to screen size
-    CORE.Window.currentFbo.width = CORE.Window.screen.width;
-    CORE.Window.currentFbo.height = CORE.Window.screen.height;
+    CORE.Window.currentFbo.width = CORE.Window.render.width;
+    CORE.Window.currentFbo.height = CORE.Window.render.height;
 }
 
 // Begin custom shader mode
