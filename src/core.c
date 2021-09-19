@@ -2180,16 +2180,20 @@ void EndBlendMode(void)
 // NOTE: Scissor rec refers to bottom-left corner, we change it to upper-left
 void BeginScissorMode(int x, int y, int width, int height)
 {
-    Vector2 scale = GetWindowScaleDPI();
-
     rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlEnableScissorTest();
-    rlScissor(
-        x * scale.x,
-        CORE.Window.currentFbo.height - (y + height) * scale.y,
-        width * scale.x,
-        height * scale.y);
+
+    if ((CORE.Window.flags & FLAG_WINDOW_HIGHDPI) > 0) {
+        Vector2 scale = GetWindowScaleDPI();
+        rlScissor(
+            x * scale.x,
+            CORE.Window.currentFbo.height - (y + height) * scale.y,
+            width * scale.x,
+            height * scale.y);
+    } else {
+        rlScissor(x, CORE.Window.currentFbo.height - (y + height), width, height);
+    }
 }
 
 // End scissor mode
